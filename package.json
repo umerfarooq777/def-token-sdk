@@ -2,11 +2,20 @@
   "name": "def-token-sdk",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/sdk.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "keywords": [
+    "blockchain",
+    "ethereum",
+    "ethers"
+  ],
+  "author": "Umar Farooqs",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.8.1"
+  }
 }
