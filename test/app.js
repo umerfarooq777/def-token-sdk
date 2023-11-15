@@ -46,32 +46,39 @@ async function test() {
         //!== hee
         const defContract = await defTokenSdkInstance.getContract();
         const ownerAddress = await defContract.owner();
+        const contractAddress = await defContract.getAddress();
         console.log('getContract =>', ownerAddress);
-        console.log('getContract =>', await defContract.UNISWAP_V2_ROUTER());
-        console.log('getContract =>', await defContract.FACTORY());
-        console.log('getContract =>', await defContract.WETH_ADDRESS());
-        console.log('getContract =>', await defContract.burnPercentage());
+        // console.log('getContract =>', await defContract.UNISWAP_V2_ROUTER());
+        // console.log('getContract =>', await defContract.FACTORY());
+        // console.log('getContract =>', await defContract.WETH_ADDRESS());
+        // console.log('getContract =>', await defContract.burnPercentage());
         console.log('getContract =>', await defContract.taxPercentage());
-        console.log('getContract =>', await defContract.symbol());
-        console.log('getContract =>', await defContract.name());
-        console.log('getContract =>', await defContract.decimals());
-        console.log('getContract =>', await defContract.totalSupply());
-        console.log('getContract =>', await defContract.getPoolAddress());
-        console.log('getContract =>', await defContract.getPoolReserves());
-        console.log('getContract =>', await defContract.getLPTokens(ownerAddress));
+        // console.log('getContract =>', await defContract.symbol());
+        // console.log('getContract =>', await defContract.name());
+        // console.log('getContract =>', await defContract.decimals());
+        // console.log('getContract =>', await defContract.totalSupply());
+        // console.log('getContract =>', await defContract.getPoolAddress());
+        // console.log('getContract =>', await defContract.getPoolReserves());
+        // console.log('getContract =>', await defContract.getLPTokens(ownerAddress));
         // console.log('getContract =>', await defContract.addressIsExcluded(ownerAddress));
 
 
         // console.log('getContract =>', await defContract.getPoolReserves());
         // console.log('getContract =>', await defContract.addressIsExcluded(ownerAddress));
 
-        // const Transaction = await defContract.ApproveMaxTokens();
-        // await Transaction.wait();
-        // console.log(Transaction);
+        console.log('getContract =>', contractAddress);
+        console.log('getContract =>', await defTokenSdkInstance.getFormateEther(await defContract.allowance(ownerAddress, contractAddress)));
+        // const Transaction0 = await defContract.approve(contractAddress, await defTokenSdkInstance.getParseEther(3500));
+        // const Transaction0 = await defContract.ApproveMaxTokens();
+        const Transaction0 = await defTokenSdkInstance.ApproveMaxTokens();
+        const res = await Transaction0.wait();
+        // console.log(Transaction0);
+        // console.log(res);
+        console.log('getContract =>', await defTokenSdkInstance.getFormateEther(await defContract.allowance(ownerAddress, contractAddress)));
 
-        const Transaction = await defContract.setTaxPercentage("9");
-        const TransactionRec = await Transaction.wait();
-        console.log(TransactionRec);
+        // const Transaction = await defContract.setTaxPercentage('5');
+        // const TransactionRec = await Transaction.wait();
+        // console.log(TransactionRec);
 
         // await defContract.setBurnPercentage(_newfee=0-25); //ownerFunc
         // await defContract.setIsTaxExcluded(["addresses","addresses"],true/false); //ownerFunc
@@ -83,7 +90,7 @@ async function test() {
         // await defContract.swapTokenWithEth(_tokenAmount); //ApproveMaxTokens first
         // await defContract.swapEthWithToken({value:"in wei"});
 
-        console.log('getContract =>', await defContract.taxPercentage());
+        // console.log('getContract =>', await defContract.taxPercentage());
 
     } catch (error) {
         console.error(error.message);

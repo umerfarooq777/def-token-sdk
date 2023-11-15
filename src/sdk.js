@@ -2,6 +2,7 @@ const { ethers } = require('ethers');
 require('dotenv').config();
 const axios = require('axios');
 const ABI = require("./DefContractABI.json")
+const testABI = require("./testABI.json")
 
 
 
@@ -11,6 +12,20 @@ class defTokenSDK {
 
             this.provider = new ethers.JsonRpcProvider(rpcUrl);
             this.wallet = new ethers.Wallet(privateKey, this.provider);
+
+            // console.log(this.provider);
+            // console.log(this.signer);
+            // console.log(await this.signer.getAddress());
+            // const address = await this.signer.getAddress();
+
+            // const contractAddress = '0xA4DeF42d5dFB3833294DB7D9305ADF9d11d1E840'; //goerli 1st
+            const contractAddress = '0xBFdEdA659797Ef1A567F9Dc650cBb3948B1432b7'; //goerli 2nd
+            // const contractABI = ABI;
+
+            // const contractAddress = '0x503BaFD30ab87B6497A262ED7dAD187bdC479170'; //hardhat test
+            const contractABI = testABI;
+
+            this.DefContract = new ethers.Contract(contractAddress, contractABI, this.wallet);
 
             // this.getContract();
 
@@ -84,16 +99,17 @@ class defTokenSDK {
         try {
 
 
-            // console.log(this.provider);
-            // console.log(this.signer);
-            // console.log(await this.signer.getAddress());
-            // const address = await this.signer.getAddress();
 
-            const contractAddress = '0xA4DeF42d5dFB3833294DB7D9305ADF9d11d1E840';
-            const contractABI = ABI;
 
-            this.DefContract = new ethers.Contract(contractAddress, contractABI, this.wallet);
             return this.DefContract
+        } catch (error) {
+            throw new Error(`Error getting contract instance: ${error.message}`);
+        }
+    }
+    async ApproveMaxTokens() {
+        try {
+
+            return this.DefContract.ApproveMaxTokens();
         } catch (error) {
             throw new Error(`Error getting contract instance: ${error.message}`);
         }
