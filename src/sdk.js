@@ -37,12 +37,23 @@ class defTokenSDK {
         }
     }
 
+    // isWholeNumber(str) {
+    //     const num = Number(str);
+    //     return !isNaN(num) && num % 1 !== 0;
+    //   }
+
+
+    async checkIsOwner() {
+        const owner = await this.DefContract.owner();
+        const msgSender = await this.wallet.getAddress();
+        if (!(owner.toLowerCase()==msgSender.toLowerCase())) {
+                
+            throw new Error(`Only allowed for owner to execute`);
+        }
+       
+      }
 
     //! =============== SDK Read Functions
-
-    async checkValidAddress(address) {
-        return ethers.isAddress(address)
-    }
 
     async getMyBalance() {
         try {
@@ -52,6 +63,7 @@ class defTokenSDK {
             throw new Error(`Error getting balance: ${error.message}`);
         }
     }
+
     async getParseEther(_amount) {
         try {
             return ethers.parseEther(_amount.toString());
@@ -95,8 +107,6 @@ class defTokenSDK {
     async getCurrentChain() {
         try {
             const network = await this.provider.getNetwork();
-            // console.log('Current chain:', network.name);
-            // console.log('Chain ID:', network.chainId);
             return network;
         } catch (error) {
             console.error('Error getting current chain:', error.message);
@@ -105,10 +115,7 @@ class defTokenSDK {
 
     async checkAddressIsTaxFree(addressToCheck) {
         try {
-                // if (!checkValidAddress(addressToCheck)) {
-                //     throw error('Invalid address: ' + addressToCheck)
-                // }
-        
+
             let res = await this.DefContract.addressIsExcluded(addressToCheck);
             return res
         } catch (error) {
@@ -119,10 +126,6 @@ class defTokenSDK {
 
     async getContract() {
         try {
-
-
-
-
             return this.DefContract
         } catch (error) {
             throw new Error(`Error getting contract instance: ${error.message}`);
@@ -130,14 +133,185 @@ class defTokenSDK {
     }
 
 
+    async getContractDetails() {
+        try {
+            let details = {
+                contractAddress: await this.DefContract.getAddress(),
+                chain : await this.provider.getNetwork(),
+                decimals: await this.DefContract.decimals(),
+                burnPercentage: await this.DefContract.burnPercentage(),
+                factoryAddress: await this.DefContract.FACTORY(),
+                poolReserves: await this.DefContract.getPoolReserves(),
+                poolAddress: await this.DefContract.getPoolAddress(),
+                name: await this.DefContract.name(),
+                owner: await this.DefContract.owner(),
+                symbol: await this.DefContract.symbol(),
+                taxPercentage: await this.DefContract.taxPercentage(),
+                totalSupply: await this.DefContract.totalSupply(),
+                routerAddress: await this.DefContract.UNISWAP_V2_ROUTER(),
+                wethAddress: await this.DefContract.WETH_ADDRESS(),
+            }
+
+
+
+
+            return details
+        } catch (error) {
+            throw new Error(`Error getting getContractDetails: ${error.message}`);
+        }
+    }
+
+
+
+    async getTokenBalanceOfAddress(address) {
+        try {
+            
+            const balance = await this.DefContract.balanceOf(address);
+            return balance;
+        } catch (error) {
+            throw new Error(`Error getting getTokenBalanceOfAddress: ${error.message}`);
+        }
+    }
+
+    async getTokenAllowance(owner,spender) {
+        try {
+            
+            const balance = await this.DefContract.allowance(owner,spender);
+            return balance;
+        } catch (error) {
+            throw new Error(`Error getting getTokenAllowance: ${error.message}`);
+        }
+    }
+
+
+    async getReceivingAmount(amountToSpent,tokenToSpent) {
+        try {
+            
+            const balance = await this.DefContract.getInputAmount(amountToSpent,tokenToSpent);
+            return balance;
+        } catch (error) {
+            throw new Error(`Error getting getReceivingAmount: ${error.message}`);
+        }
+    }
+
+    async getSpendingAmount(amountToReceive,tokenToReceive) {
+        try {
+            
+            const balance = await this.DefContract.getReturnAmount(amountToReceive,tokenToReceive);
+            return balance;
+        } catch (error) {
+            throw new Error(`Error getting getSpendingAmount: ${error.message}`);
+        }
+    }
+
+
+    async getLiquidityPoolTokensOf(providerAddress) {
+        try {
+            
+            const balance = await this.DefContract.getLPTokens(providerAddress);
+            return balance;
+        } catch (error) {
+            throw new Error(`Error getting getLiquidityPoolTokensOf: ${error.message}`);
+        }
+    }
+
+
     //! =============== SDK Write Functions
 
-    async ApproveMaxTokens() {
+    async ApproveMaxTokensToContract() {
         try {
         let res = await this.DefContract.ApproveMaxTokens();
             return res
         } catch (error) {
             throw new Error(`Error approving max tokens instance: ${error.message}`);
+        }
+    }
+
+    async approveTokensTo(spenderAddress,amount) {
+        try {
+        let res = await this.DefContract.approve(spenderAddress,amount);
+            return res
+        } catch (error) {
+            throw new Error(`Error approving max tokens instance: ${error.message}`);
+        }
+    }
+
+
+    async setNewBurnPercentage(_percentage) {
+        try {
+            
+            await this.checkIsOwner();
+            
+
+            //! added later
+            // if (!this.isWholeNumber(_percentage)){
+            //     throw new Error(`Please set percentage ${_percentage} as a whole number `);
+            // }
+            
+
+
+            if (!(Number(_percentage)>=1&&Number(_percentage)<=250)){
+                throw new Error(`Please set percentage ${_percentage} between 1 for 0.1% and 250 for 25%`);
+            }
+            
+            const burnPercentage = (await this.DefContract.burnPercentage()).toString()
+
+
+            if (burnPercentage===_percentage){
+                throw new Error(`Please set a new percentage ${_percentage},can't be same as old`);
+            }
+
+
+        let res = await this.DefContract.setBurnPercentage(_percentage);
+            return res
+        } catch (error) {
+            throw new Error(`Error setNewBurnPercentage: ${error.message}`);
+        }
+    }
+
+    async setNewTaxPercentage(_percentage) {
+        try {
+            
+            await this.checkIsOwner();
+            
+
+            //! added later
+            // if (!this.isWholeNumber(_percentage)){
+            //     throw new Error(`Please set percentage ${_percentage} as a whole number `);
+            // }
+            
+
+
+            if (!(Number(_percentage)>=1&&Number(_percentage)<=250)){
+                throw new Error(`Please set percentage ${_percentage} between 1 for 0.1% and 250 for 25%`);
+            }
+            
+            const taxPercentage = (await this.DefContract.taxPercentage()).toString()
+
+
+            if (taxPercentage===_percentage){
+                throw new Error(`Please set a new percentage ${_percentage},can't be same as old`);
+            }
+
+
+        let res = await this.DefContract.setTaxPercentage(_percentage);
+            return res
+        } catch (error) {
+            throw new Error(`Error setNewTaxPercentage: ${error.message}`);
+        }
+    }
+
+
+    async updateTaxFreeAddressesAccess(_addresses, _hasAccess) {
+        try {
+            
+            await this.checkIsOwner();
+
+
+        let res = await this.DefContract.setIsTaxExcluded(_addresses, _hasAccess);
+            return res
+        } catch (error) {
+            throw new Error(`Error setNewTaxPercentage: ${error.message}`);
         }
     }
 }

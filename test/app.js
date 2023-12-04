@@ -6,6 +6,7 @@ const rpcUrl = process.env.RPC_URL;
 const privateKey = process.env.PRIVATE_KEY;
 
 
+
 async function test() {
     try {
         // console.log(rpcUrl, privateKey);
@@ -13,6 +14,13 @@ async function test() {
         // const { getParseEther, getContract,getMyBalance } = new defTokenSdk(rpcUrl, privateKey);
 
         const recipientAddress = "0xf3545A1eaD63eD1A6d8b6E63d68D937cdBf1aeE4"
+        async function getTokenToWei(_amount) {
+                return defTokenSdkInstance.getParseEther(_amount.toString());
+            
+        }
+        async function getWeiToToken(_amount) {
+                return defTokenSdkInstance.getFormateEther(_amount.toString());
+        }
 
         //!=== working fine
         const balance = await defTokenSdkInstance.getMyBalance();
@@ -44,59 +52,45 @@ async function test() {
         // console.log('Events =>', eventsData);
 
 
-        //!== hee
+        //!== READ
         const defContract = await defTokenSdkInstance.getContract();
         const ownerAddress = await defContract.owner();
         const contractAddress = await defContract.getAddress();
-        console.log('getContract =>', ownerAddress);
-        // console.log('getContract =>', await defContract.UNISWAP_V2_ROUTER());
-        // console.log('getContract =>', await defContract.FACTORY());
-        // console.log('getContract =>', await defContract.WETH_ADDRESS());
-        // console.log('getContract =>', await defContract.burnPercentage());
-        console.log('getContract =>', await defContract.taxPercentage());
-        // console.log('getContract =>', await defContract.symbol());
-        // console.log('getContract =>', await defContract.name());
-        // console.log('getContract =>', await defContract.decimals());
-        // console.log('getContract =>', await defContract.totalSupply());
-        // console.log('getContract =>', await defContract.getPoolAddress());
-        // console.log('getContract =>', await defContract.getPoolReserves());
-        // console.log('getContract =>', await defContract.getLPTokens(ownerAddress));
-        // console.log('getContract =>', await defContract.addressIsExcluded(ownerAddress));
+        // console.log('getContract =>', await defTokenSdkInstance.getContractDetails());
 
 
-        // console.log('getContract =>', await defContract.getPoolReserves());
-        // console.log('getContract =>', await defContract.addressIsExcluded(ownerAddress));
 
-        console.log('getContract =>', contractAddress);
-        console.log('getContract =>', await defTokenSdkInstance.getFormateEther(await defContract.allowance(ownerAddress, contractAddress)));
-        // const Transaction0 = await defContract.approve(contractAddress, await defTokenSdkInstance.getParseEther(3500));
-        // const Transaction0 = await defContract.ApproveMaxTokens();
 
-        const Transaction0 = await defTokenSdkInstance.checkAddressIsTaxFree("0x808f0597D8B83189ED43d61d40064195F71C0D15");
-        console.log(Transaction0);
-        // const Transaction0 = await defTokenSdkInstance.ApproveMaxTokens();
-        // console.log(Transaction0.hash);
+        //! WRITE
+
+        //approves respective tokens to a spender
+        // const Transaction0 = await defTokenSdkInstance.approveTokensTo(contractAddress,await getTokenToWei("333"));
         // const res = await Transaction0.wait();
-        console.log('getContract =>', await defTokenSdkInstance.getFormateEther(await defContract.allowance(ownerAddress, contractAddress)));
+        // console.log('getContract =>', await defTokenSdkInstance.getFormateEther(await defTokenSdkInstance.getTokenAllowance(ownerAddress, contractAddress)));
         
+        //approves max tokens to def contract
+        // const Transaction1 = await defTokenSdkInstance.ApproveMaxTokensToContract();
+        // const res1 = await Transaction1.wait();
+        // console.log('getContract =>', await defTokenSdkInstance.getFormateEther(await defTokenSdkInstance.getTokenAllowance(ownerAddress, contractAddress)));
         
-        // console.log(res);
+        //set burn percentage by only owner 
+        // console.log('getContract =>', (await defTokenSdkInstance.getContractDetails()).burnPercentage);
+        // const Transaction1 = await defTokenSdkInstance.setNewBurnPercentage("2");
+        // const res1 = await Transaction1.wait();
+        // console.log('getContract =>', (await defTokenSdkInstance.getContractDetails()).burnPercentage);
+        
+        // set tax percentage by only owner 
+        // console.log('getContract =>', (await defTokenSdkInstance.getContractDetails()).taxPercentage);
+        // const Transaction1 = await defTokenSdkInstance.setNewTaxPercentage("8");
+        // const res1 = await Transaction1.wait();
+        // console.log('getContract =>', (await defTokenSdkInstance.getContractDetails()).taxPercentage);
+        
+        // set tax percentage by only owner 
+        console.log('getContract =>', (await defTokenSdkInstance.getContractDetails()).taxPercentage);
+        const Transaction1 = await defTokenSdkInstance.setNewTaxPercentage("8");
+        const res1 = await Transaction1.wait();
+        console.log('getContract =>', (await defTokenSdkInstance.getContractDetails()).taxPercentage);
 
-        // const Transaction = await defContract.setTaxPercentage('5');
-        // const TransactionRec = await Transaction.wait();
-        // console.log(TransactionRec);
-
-        // await defContract.setBurnPercentage(_newfee=0-25); //ownerFunc
-        // await defContract.setIsTaxExcluded(["addresses","addresses"],true/false); //ownerFunc
-        // await defContract.transfer(_to,_amount);
-        // await defContract.transferFrom(_from,_to,_amount);
-        // await defContract.addLiquidityETHToPool(_amount,{value:"in wei"});
-        // await defContract.removeLiquidityETHToPool(_LP_amount);
-        // await defContract.withDrawTaxCollection(); //ownerFunc
-        // await defContract.swapTokenWithEth(_tokenAmount); //ApproveMaxTokens first
-        // await defContract.swapEthWithToken({value:"in wei"});
-
-        // console.log('getContract =>', await defContract.taxPercentage());
 
     } catch (error) {
         console.error(error.message);
