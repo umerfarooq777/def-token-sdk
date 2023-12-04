@@ -8,6 +8,7 @@ const privateKey = process.env.PRIVATE_KEY;
 
 async function test() {
     try {
+        // console.log(rpcUrl, privateKey);
         const defTokenSdkInstance = new defTokenSdk(rpcUrl, privateKey);
         // const { getParseEther, getContract,getMyBalance } = new defTokenSdk(rpcUrl, privateKey);
 
@@ -70,11 +71,16 @@ async function test() {
         console.log('getContract =>', await defTokenSdkInstance.getFormateEther(await defContract.allowance(ownerAddress, contractAddress)));
         // const Transaction0 = await defContract.approve(contractAddress, await defTokenSdkInstance.getParseEther(3500));
         // const Transaction0 = await defContract.ApproveMaxTokens();
-        const Transaction0 = await defTokenSdkInstance.ApproveMaxTokens();
-        const res = await Transaction0.wait();
-        // console.log(Transaction0);
-        // console.log(res);
+
+        const Transaction0 = await defTokenSdkInstance.checkAddressIsTaxFree("0x808f0597D8B83189ED43d61d40064195F71C0D15");
+        console.log(Transaction0);
+        // const Transaction0 = await defTokenSdkInstance.ApproveMaxTokens();
+        // console.log(Transaction0.hash);
+        // const res = await Transaction0.wait();
         console.log('getContract =>', await defTokenSdkInstance.getFormateEther(await defContract.allowance(ownerAddress, contractAddress)));
+        
+        
+        // console.log(res);
 
         // const Transaction = await defContract.setTaxPercentage('5');
         // const TransactionRec = await Transaction.wait();

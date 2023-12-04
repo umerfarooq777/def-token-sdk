@@ -7,6 +7,8 @@ const testABI = require("./testABI.json")
 
 
 class defTokenSDK {
+
+    //! =============== SDK Construction
     constructor(rpcUrl, privateKey) {
         try {
 
@@ -33,6 +35,13 @@ class defTokenSDK {
             throw new Error(`Error creating sdk: ${error.message}`);
 
         }
+    }
+
+
+    //! =============== SDK Read Functions
+
+    async checkValidAddress(address) {
+        return ethers.isAddress(address)
     }
 
     async getMyBalance() {
@@ -94,6 +103,19 @@ class defTokenSDK {
         }
     }
 
+    async checkAddressIsTaxFree(addressToCheck) {
+        try {
+                // if (!checkValidAddress(addressToCheck)) {
+                //     throw error('Invalid address: ' + addressToCheck)
+                // }
+        
+            let res = await this.DefContract.addressIsExcluded(addressToCheck);
+            return res
+        } catch (error) {
+            console.error('Error checkAddressIsTaxFree :', error.message);
+        }
+    }
+
 
     async getContract() {
         try {
@@ -106,12 +128,16 @@ class defTokenSDK {
             throw new Error(`Error getting contract instance: ${error.message}`);
         }
     }
+
+
+    //! =============== SDK Write Functions
+
     async ApproveMaxTokens() {
         try {
-
-            return this.DefContract.ApproveMaxTokens();
+        let res = await this.DefContract.ApproveMaxTokens();
+            return res
         } catch (error) {
-            throw new Error(`Error getting contract instance: ${error.message}`);
+            throw new Error(`Error approving max tokens instance: ${error.message}`);
         }
     }
 }
