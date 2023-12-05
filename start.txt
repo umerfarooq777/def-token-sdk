@@ -1,0 +1,8 @@
+
+
+1st ==> "npm i" in root directory 
+2nd ==> "npm i" in root/test directory 
+3rd ==> "npm link def-token-sdk" in root/test directory 
+4th ==> create ".env" in root/test directory with  PRIVATE_KEY='' RPC_URL=''
+5th ==> uncomment executable code in app.js and run "node app.js" in root/test directory 
+

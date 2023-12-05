@@ -229,22 +229,22 @@ async function test() {
         
         //! === 14
         // remove liquidity eth with token
-        const lpTokenAmount = await getTokenToWei("0.000001")
-        const userAddress = await defTokenSdkInstance.getSigner().getAddress();
-        console.log("current userAddress Token Balance",(await defTokenSdkInstance.getTokenBalanceOfAddress(userAddress)));
-        console.log("current userAddress ETH Balance",(await defTokenSdkInstance.getETHBalanceOf(userAddress)));
-        console.log("current userAddress Token Allowance",(await defTokenSdkInstance.getTokenAllowance(userAddress,contractAddress)));
-        console.log("current userAddress LP Token Balance",(await defTokenSdkInstance.getLiquidityPoolTokensOf(userAddress)));
+        // const lpTokenAmount = await getTokenToWei("0.000001")
+        // const userAddress = await defTokenSdkInstance.getSigner().getAddress();
+        // console.log("current userAddress Token Balance",(await defTokenSdkInstance.getTokenBalanceOfAddress(userAddress)));
+        // console.log("current userAddress ETH Balance",(await defTokenSdkInstance.getETHBalanceOf(userAddress)));
+        // console.log("current userAddress Token Allowance",(await defTokenSdkInstance.getTokenAllowance(userAddress,contractAddress)));
+        // console.log("current userAddress LP Token Balance",(await defTokenSdkInstance.getLiquidityPoolTokensOf(userAddress)));
         
-        //caller account must give allowance to function contract address
-        const Transaction1 = await defTokenSdkInstance.removeLiquidityETHToPool(lpTokenAmount.toString());
-        const res1 = await Transaction1.wait();
+        // //caller account must give allowance to function contract address
+        // const Transaction1 = await defTokenSdkInstance.removeLiquidityETHToPool(lpTokenAmount.toString());
+        // const res1 = await Transaction1.wait();
         
-        console.log("================================================ end of Transaction1================================");
-        console.log("current userAddress Token Balance",(await defTokenSdkInstance.getTokenBalanceOfAddress(userAddress)));
-        console.log("current userAddress ETH Balance",(await defTokenSdkInstance.getETHBalanceOf(userAddress)));
-        console.log("current userAddress Token Allowance",(await defTokenSdkInstance.getTokenAllowance(userAddress,contractAddress)));
-        console.log("current userAddress LP Token Balance",(await defTokenSdkInstance.getLiquidityPoolTokensOf(userAddress)));
+        // console.log("================================================ end of Transaction1================================");
+        // console.log("current userAddress Token Balance",(await defTokenSdkInstance.getTokenBalanceOfAddress(userAddress)));
+        // console.log("current userAddress ETH Balance",(await defTokenSdkInstance.getETHBalanceOf(userAddress)));
+        // console.log("current userAddress Token Allowance",(await defTokenSdkInstance.getTokenAllowance(userAddress,contractAddress)));
+        // console.log("current userAddress LP Token Balance",(await defTokenSdkInstance.getLiquidityPoolTokensOf(userAddress)));
 
 
 
