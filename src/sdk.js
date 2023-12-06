@@ -12,11 +12,15 @@ const poolABI = require("./poolABI.json")
 class defTokenSDK {
 
     //! =============== SDK Construction
-    constructor(rpcUrl, privateKey) {
+    // constructor(rpcUrl, privateKey) {
+    constructor(provider) {
         try {
 
-            this.provider = new ethers.JsonRpcProvider(rpcUrl);
-            this.wallet = new ethers.Wallet(privateKey, this.provider);
+            this.provider = provider
+            this.wallet = provider
+
+            // this.provider = new ethers.JsonRpcProvider(rpcUrl);
+            // this.wallet = new ethers.Wallet(privateKey, this.provider);
 
             // console.log(this.provider);
             // console.log(this.signer);
