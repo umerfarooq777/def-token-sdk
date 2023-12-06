@@ -13,18 +13,15 @@ class defTokenSDK {
 
     //! =============== SDK Construction
     // constructor(rpcUrl, privateKey) {
-    constructor(provider) {
+    constructor(provider,signer) {
         try {
 
             this.provider = provider
-            this.wallet = provider
+            this.wallet = signer
 
             // this.provider = new ethers.JsonRpcProvider(rpcUrl);
             // this.wallet = new ethers.Wallet(privateKey, this.provider);
 
-            // console.log(this.provider);
-            // console.log(this.signer);
-            // console.log(await this.signer.getAddress());
             // const address = await this.signer.getAddress();
 
             // const contractAddress = '0xA4DeF42d5dFB3833294DB7D9305ADF9d11d1E840'; //goerli 1st
@@ -72,7 +69,6 @@ class defTokenSDK {
                 throw new Error(`amount (${amount}) must be greater than 0 `);
             }
 
-            // console.log(await this.wallet.getAddress(),await this.DefContract.getAddress());
             const userAllowanceToContract = await this.getTokenAllowance( _ownerAddress|| await this.wallet.getAddress(),_spenderAddress||await this.DefContract.getAddress());
             
             const amountToSwap = BigNumber(amount.toString());
@@ -114,7 +110,6 @@ class defTokenSDK {
             }
             
         
-       console.log("done");
       }
     async validateUserLPTokenAllowance(amount) {
  
@@ -141,7 +136,6 @@ class defTokenSDK {
             }
             
         
-            console.log("done");
        
       }
 
@@ -257,7 +251,6 @@ class defTokenSDK {
                 })
                 .then((res) => {
                     const data = res.data.data;
-                    // console.log(data);
                     return data;
 
                 }).catch((error) => {
